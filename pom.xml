@@ -26,6 +26,7 @@
 	    <tomcat.ip>127.0.0.1</tomcat.ip>
 	    <file>readme</file>
 		<lombok.version>1.18.10</lombok.version>
+		<jacoco.version>0.8.11</jacoco.version>
 	</properties>
 
 	<dependencies>
@@ -86,6 +87,7 @@
 		</dependency>
 
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -103,13 +105,11 @@
                     </execution>
                 </executions>
 			</plugin>
-			
-	         <plugin>
+	        <plugin>
 		        <groupId>io.fabric8</groupId>
 		        <artifactId>docker-maven-plugin</artifactId>
 		        <extensions>true</extensions>
-		        
- 		        <configuration>
+		        <configuration>
 		          <images>
 			            <image>
 			              <name>springboot-jwt</name>
@@ -123,10 +123,10 @@
 			              </build>
 			              <run>
 			              	<namingStrategy>alias</namingStrategy>
-			                <ports> 
+			                <ports>
 			                  <port>${tomcat.port}:8080</port>
 			                </ports>
-					         <wait> 
+					         <wait>
 					           <http>
 					              <url>http://${tomcat.ip}:${tomcat.port}/actuator/health</url>
 					           </http>
@@ -135,16 +135,16 @@
 			              </run>
 			            </image>
 		          </images>
-		        </configuration>	
-		        	
-		      </plugin>
+		        </configuration>
+
+		    </plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>1.8</source>
+					 <source>1.8</source>
 					<target>1.8</target>
 					<annotationProcessorPaths>
 						<path>
@@ -155,7 +155,25 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
