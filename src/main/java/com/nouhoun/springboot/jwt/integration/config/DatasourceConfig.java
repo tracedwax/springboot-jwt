@@ -20,13 +20,22 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 /**
- * Created by nydiarra on 06/05/17.
+ * Configuration class for the data source and JPA setup.
+ * This configures an embedded H2 database, sets up the entity manager factory,
+ * and defines the transaction manager.
  */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.nouhoun.springboot.jwt.integration.repository")
 public class DatasourceConfig {
 
+    /**
+     * Creates the embedded H2 data source.
+     * It initializes the database with schema.sql and data.sql scripts.
+     *
+     * @return The embedded H2 data source.
+     * @throws PropertyVetoException If there is an error configuring the data source.  (Not expected with embedded databases).
+     */
     @Bean
     public DataSource datasource() throws PropertyVetoException {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
@@ -39,6 +48,14 @@ public class DatasourceConfig {
         return dataSource;
     }
 
+    /**
+     * Creates the entity manager factory.
+     * Configures the data source, package scanning for entities, and the JPA vendor adapter (Hibernate).
+     *
+     * @param ds The data source.
+     * @return The entity manager factory.
+     * @throws PropertyVetoException If there's an issue with data source configuration (not expected with embedded databases).
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("datasource") DataSource ds) throws PropertyVetoException{
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
@@ -49,6 +66,13 @@ public class DatasourceConfig {
         return entityManagerFactory;
     }
 
+    /**
+     * Creates the transaction manager.
+     * Uses the entity manager factory for managing transactions.
+     *
+     * @param entityManagerFactory The entity manager factory.
+     * @return The transaction manager.
+     */
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory){
         JpaTransactionManager transactionManager = new JpaTransactionManager();

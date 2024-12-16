@@ -14,13 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by nydiarra on 06/05/17.
+ * Custom implementation of the {@link UserDetailsService} interface.
+ * This class is responsible for loading user details from the database based on the username.
  */
 @Component
 public class AppUserDetailsService implements UserDetailsService {
+
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Loads user details by username.
+     * Retrieves the user from the database based on the provided username.
+     * If the user is found, their roles are converted into GrantedAuthority objects,
+     * and a UserDetails object is created and returned.
+     * If the user is not found, a UsernameNotFoundException is thrown.
+     *
+     * @param s The username to search for.  (Parameter name could be improved to 'username')
+     * @return A UserDetails object containing the user's information and authorities.
+     * @throws UsernameNotFoundException if the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(s);

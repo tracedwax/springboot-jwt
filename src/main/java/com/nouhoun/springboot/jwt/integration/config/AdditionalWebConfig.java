@@ -8,15 +8,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * Created by nydiarra on 06/05/17.
+ * Configuration class for additional web configurations.
+ * This class primarily focuses on configuring Cross-Origin Resource Sharing (CORS).
  */
 @Configuration
 public class AdditionalWebConfig {
+
     /**
-     * Allowing all origins, headers and methods here is only intended to keep this example simple.
-     * This is not a default recommended configuration. Make adjustments as
-     * necessary to your use case.
+     * Creates and registers a CORS filter.
+     * This filter allows cross-origin requests from any origin with any header and any HTTP method.
      *
+     * Important Note: Allowing all origins, headers, and methods is simplified for this example and
+     * is generally not recommended for production environments.  Adjust these settings to match
+     * your specific security requirements.
+     *
+     * @return The registered {@link FilterRegistrationBean} for the CORS filter.
      */
     @Bean
     public FilterRegistrationBean corsFilter() {
