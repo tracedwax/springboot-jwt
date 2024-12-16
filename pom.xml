@@ -18,6 +18,13 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
+    <repositories>
+        <repository>
+            <id>openclover-maven-repository</id>
+            <url>https://openclover.org/maven2</url>
+        </repository>
+    </repositories>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -46,7 +53,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -67,7 +73,6 @@
 			<artifactId>spring-security-jwt</artifactId>
 			<version>1.0.7.RELEASE</version>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
@@ -78,14 +83,12 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.9.10.8</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -136,7 +139,6 @@
 			            </image>
 		          </images>
 		        </configuration>
-
 		    </plugin>
 
 			<plugin>
@@ -155,25 +157,45 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>4.4.1</version>
+                <configuration>
+                    <targetPercentage>0%</targetPercentage>
+                    <generateHistorical>true</generateHistorical>
+                    <generateHTML>true</generateHTML>
+                    <generateJSON>false</generateJSON>
+                    <generatePdf>false</generatePdf>
+                    <generateXml>true</generateXml>
+                    <singleCloverDatabase>true</singleCloverDatabase>
+                    <verbose>true</verbose>
+                    <methodContexts>
+                        <main>.*</main>
+                    </methodContexts>
+                    <statementContexts>
+                        <main>.*</main>
+                    </statementContexts>
+                    <metrics>
+                        <statement>0%</statement>
+                        <method>0%</method>
+                        <block>0%</block>
+                    </metrics>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>clover</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                            <goal>check</goal>
+                            <goal>clover</goal>
+                            <goal>log</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 </project>
